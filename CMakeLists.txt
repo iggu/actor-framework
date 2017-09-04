@@ -16,28 +16,28 @@ if(WIN32 AND NOT CAF_BUILD_STATIC_ONLY)
 endif()
 
 if(CAF_BUILD_STATIC_RUNTIME)
-    set(flags_configs
-        CMAKE_CXX_FLAGS
-        CMAKE_CXX_FLAGS_DEBUG
-        CMAKE_CXX_FLAGS_RELEASE
-        CMAKE_C_FLAGS
-        CMAKE_C_FLAGS_DEBUG
-        CMAKE_C_FLAGS_RELEASE
-        )
-    foreach(flags ${flags_configs})
-        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-            if(NOT ${flags} MATCHES "-static-libstdc\\+\\+")
-                set(${flags} "${${flags}} -static-libstdc++")
-            endif()
-            if(NOT ${flags} MATCHES "-static-libgcc")
-                set(${flags} "${${flags}} -static-libgcc")
-            endif()
-        elseif(MSVC)
-            if(${flags} MATCHES "/MD")
-                string(REGEX REPLACE "/MD" "/MT" ${flags} "${${flags}}")
-            endif()
-        endif()
-    endforeach()
+  set(flags_configs
+      CMAKE_CXX_FLAGS
+      CMAKE_CXX_FLAGS_DEBUG
+      CMAKE_CXX_FLAGS_RELEASE
+      CMAKE_C_FLAGS
+      CMAKE_C_FLAGS_DEBUG
+      CMAKE_C_FLAGS_RELEASE
+     )
+  foreach(flags ${flags_configs})
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"  OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      if(NOT ${flags} MATCHES "-static-libstdc\\+\\+")
+        set(${flags} "${${flags}} -static-libstdc++")
+      endif()
+      if(NOT ${flags} MATCHES "-static-libgcc")
+        set(${flags} "${${flags}} -static-libgcc")
+      endif()
+    elseif(MSVC)
+      if(${flags} MATCHES "/MD")
+        string(REGEX REPLACE "/MD" "/MT" ${flags} "${${flags}}")
+      endif()
+    endif()
+  endforeach()
 endif()
 
 ################################################################################
